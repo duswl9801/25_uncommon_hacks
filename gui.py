@@ -12,200 +12,310 @@ def load_custom_font(font_path):
         return font_families[0]
     return None
 
-class LoginDialog(QtWidgets.QDialog):
-    def __init__(self):
+class LoginPage(QtWidgets.QWidget):
+    def __init__(self, main_window):
         super().__init__()
-        self.setWindowTitle("Login")
-        self.setFixedSize(300, 200)
+        self.main_window = main_window
         self.setup_ui()
         self.setStyleSheet("""
-            QDialog {
-                background-color: #000;
+            QWidget {
+                background-color: #0E1323;
             }
             QLabel {
-                color: #0f0;
+                color: #4CF190;
                 font-family: "Press Start 2P", cursive;
                 font-size: 12px;
             }
             QLineEdit {
-                background-color: #222;
-                color: #0f0;
-                border: 2px solid #0f0;
+                background-color: #0E1323;
+                color: #4CF190;
+                border: 2px solid #4CF190;
                 padding: 5px;
                 font-family: "Press Start 2P", cursive;
                 font-size: 12px;
             }
             QPushButton {
-                background-color: #222;
-                color: #0f0;
-                border: 2px solid #0f0;
+                background-color: #0E1323;
+                color: #4CF190;
+                border: 2px solid #4CF190;
                 padding: 10px;
                 font-size: 16px;
                 font-family: "Press Start 2P", cursive;
             }
             QPushButton:hover {
-                background-color: #333;
+                background-color: #4CF190;
+                color: #0E1323;
             }
         """)
 
     def setup_ui(self):
+        layout = QtWidgets.QVBoxLayout()
+        form_layout = QtWidgets.QFormLayout()
         self.username_label = QtWidgets.QLabel("Username:")
         self.username_edit = QtWidgets.QLineEdit()
         self.password_label = QtWidgets.QLabel("Password:")
         self.password_edit = QtWidgets.QLineEdit()
         self.password_edit.setEchoMode(QtWidgets.QLineEdit.Password)
-        self.login_button = QtWidgets.QPushButton("Login")
-
-        layout = QtWidgets.QVBoxLayout()
-        form_layout = QtWidgets.QFormLayout()
         form_layout.addRow(self.username_label, self.username_edit)
         form_layout.addRow(self.password_label, self.password_edit)
         layout.addLayout(form_layout)
+        self.login_button = QtWidgets.QPushButton("Login")
         layout.addWidget(self.login_button)
         self.setLayout(layout)
-
         self.login_button.clicked.connect(self.handle_login)
 
     def handle_login(self):
         username = self.username_edit.text()
         password = self.password_edit.text()
-        # 간단한 로그인 검증 (실제 환경에서는 보안에 유의)
+        # TODO - Connect Login
         if username == "admin" and password == "1234":
-            self.accept()
+            self.main_window.stacked_widget.setCurrentWidget(self.main_window.menu_page)
         else:
             QtWidgets.QMessageBox.warning(self, "Error", "Incorrect username or password")
 
-class TimerDialog(QtWidgets.QDialog):
-    def __init__(self):
+class MenuPage(QtWidgets.QWidget):
+    def __init__(self, main_window):
         super().__init__()
-        self.setWindowTitle("Set Timer")
-        self.setFixedSize(250, 150)
+        self.main_window = main_window
         self.setup_ui()
         self.setStyleSheet("""
-            QDialog {
-                background-color: #000;
+            QWidget {
+                background-color: #0E1323;
+            }
+            QPushButton {
+                background-color: #0E1323;
+                color: #4CF190;
+                border: 2px solid #4CF190;
+                padding: 10px;
+                font-size: 16px;
+                font-family: "Press Start 2P", cursive;
+            }
+            QPushButton:hover {
+                background-color: #4CF190;
+                color: #0E1323;
+            }
+        """)
+
+    def setup_ui(self):
+        layout = QtWidgets.QHBoxLayout()
+        self.cheat_button = QtWidgets.QPushButton("HELP")
+        self.timer_button = QtWidgets.QPushButton("TIMER")
+        self.quit_button = QtWidgets.QPushButton("QUIT")
+        layout.addWidget(self.cheat_button)
+        layout.addWidget(self.timer_button)
+        layout.addWidget(self.quit_button)
+        self.setLayout(layout)
+
+        self.quit_button.clicked.connect(QtWidgets.QApplication.quit)
+        self.timer_button.clicked.connect(lambda: self.main_window.stacked_widget.setCurrentWidget(self.main_window.timer_page))
+        self.cheat_button.clicked.connect(self.handle_cheat)
+
+    def handle_cheat(self):
+        # TODO - LLM
+        self.main_window.stacked_widget.setCurrentWidget(self.main_window.info_alert_page)
+
+class TimerPage(QtWidgets.QWidget):
+    def __init__(self, main_window):
+        super().__init__()
+        self.main_window = main_window
+        self.setup_ui()
+        self.setStyleSheet("""
+            QWidget {
+                background-color: #0E1323;
             }
             QLabel {
-                color: #0f0;
+                color: #4CF190;
                 font-family: "Press Start 2P", cursive;
                 font-size: 12px;
             }
             QSpinBox {
-                background-color: #222;
-                color: #0f0;
-                border: 2px solid #0f0;
+                background-color: #0E1323;
+                color: #4CF190;
+                border: 2px solid #4CF190;
                 padding: 5px;
                 font-family: "Press Start 2P", cursive;
                 font-size: 12px;
             }
             QPushButton {
-                background-color: #222;
-                color: #0f0;
-                border: 2px solid #0f0;
+                background-color: #0E1323;
+                color: #4CF190;
+                border: 2px solid #4CF190;
                 padding: 10px;
                 font-size: 16px;
                 font-family: "Press Start 2P", cursive;
             }
             QPushButton:hover {
-                background-color: #333;
+                background-color: #4CF190;
+                color: #0E1323;
             }
         """)
 
     def setup_ui(self):
+        layout = QtWidgets.QVBoxLayout()
+        form_layout = QtWidgets.QFormLayout()
         self.hours_label = QtWidgets.QLabel("Hours:")
-        self.minutes_label = QtWidgets.QLabel("Minutes:")
         self.hours_spin = QtWidgets.QSpinBox()
         self.hours_spin.setRange(0, 23)
+        self.minutes_label = QtWidgets.QLabel("Minutes:")
         self.minutes_spin = QtWidgets.QSpinBox()
         self.minutes_spin.setRange(0, 59)
-        self.start_button = QtWidgets.QPushButton("Start Timer")
-
-        form_layout = QtWidgets.QFormLayout()
         form_layout.addRow(self.hours_label, self.hours_spin)
         form_layout.addRow(self.minutes_label, self.minutes_spin)
-
-        layout = QtWidgets.QVBoxLayout()
         layout.addLayout(form_layout)
-        layout.addWidget(self.start_button)
+
+        button_layout = QtWidgets.QHBoxLayout()
+        self.set_button = QtWidgets.QPushButton("Set")
+        self.cancel_button = QtWidgets.QPushButton("Cancel")
+        button_layout.addWidget(self.set_button)
+        button_layout.addWidget(self.cancel_button)
+        layout.addLayout(button_layout)
         self.setLayout(layout)
 
-        self.start_button.clicked.connect(self.accept)
+        self.set_button.clicked.connect(self.set_timer)
+        self.cancel_button.clicked.connect(lambda: self.main_window.stacked_widget.setCurrentWidget(self.main_window.menu_page))
 
-    def get_total_seconds(self):
+    def set_timer(self):
         hours = self.hours_spin.value()
         minutes = self.minutes_spin.value()
-        return hours * 3600 + minutes * 60
+        total_seconds = hours * 3600 + minutes * 60
+        if total_seconds == 0:
+            # 타이머 시간이 0이면 InfoAlertPage 표시
+            self.main_window.stacked_widget.setCurrentWidget(self.main_window.info_alert_page)
+        else:
+            self.main_window.user_timer = QtCore.QTimer(self)
+            self.main_window.user_timer.setSingleShot(True)
+            self.main_window.user_timer.timeout.connect(self.main_window.show_timer_alert_page)
+            self.main_window.user_timer.start(total_seconds * 1000)
+            self.main_window.stacked_widget.setCurrentWidget(self.main_window.menu_page)
 
-# 메인 창 (레트로 디자인 적용, 항상 위에 표시됨)
-class MainWindow(QtWidgets.QMainWindow):
-    def __init__(self, custom_font_family=None):
+class TimerAlertPage(QtWidgets.QWidget):
+    def __init__(self, main_window):
         super().__init__()
-        self.setWindowTitle("Retro Game Theme")
-        self.setGeometry(100, 100, 400, 200)
-        self.setWindowFlag(QtCore.Qt.WindowStaysOnTopHint)
-
-        central_widget = QtWidgets.QWidget()
-        self.setCentralWidget(central_widget)
-        layout = QtWidgets.QHBoxLayout()
-        central_widget.setLayout(layout)
-
-        self.cheat_button = QtWidgets.QPushButton("HELP")
-        self.timer_button = QtWidgets.QPushButton("TIMER")
-        self.quit_button = QtWidgets.QPushButton("QUIT")
-
-        layout.addWidget(self.cheat_button)
-        layout.addWidget(self.timer_button)
-        layout.addWidget(self.quit_button)
-
-        self.quit_button.clicked.connect(QtWidgets.QApplication.quit)
-        self.timer_button.clicked.connect(self.open_timer_dialog)
-
+        self.main_window = main_window
+        self.setup_ui()
         self.setStyleSheet("""
-            QMainWindow {
-                background-color: #000;
+            QWidget {
+                background-color: #0E1323;
+            }
+            QLabel {
+                color: #4CF190;
+                font-family: "Press Start 2P", cursive;
+                font-size: 14px;
             }
             QPushButton {
-                background-color: #222;
-                color: #0f0;
-                border: 2px solid #0f0;
+                background-color: #0E1323;
+                color: #4CF190;
+                border: 2px solid #4CF190;
                 padding: 10px;
                 font-size: 16px;
                 font-family: "Press Start 2P", cursive;
             }
             QPushButton:hover {
-                background-color: #333;
+                background-color: #4CF190;
+                color: #0E1323;
+            }
+        """)
+        self.auto_close_timer = QtCore.QTimer(self)
+        self.auto_close_timer.setSingleShot(True)
+        self.auto_close_timer.timeout.connect(self.auto_close)
+
+    def setup_ui(self):
+        layout = QtWidgets.QVBoxLayout()
+        self.message_label = QtWidgets.QLabel("Time's up! Ready to take a break?")
+        layout.addWidget(self.message_label)
+        button_layout = QtWidgets.QHBoxLayout()
+        self.quit_button = QtWidgets.QPushButton("Quit")
+        self.ignore_button = QtWidgets.QPushButton("Ignore")
+        button_layout.addWidget(self.quit_button)
+        button_layout.addWidget(self.ignore_button)
+        layout.addLayout(button_layout)
+        self.setLayout(layout)
+
+        self.quit_button.clicked.connect(QtWidgets.QApplication.quit)
+        self.ignore_button.clicked.connect(lambda: self.main_window.stacked_widget.setCurrentWidget(self.main_window.menu_page))
+
+    def showEvent(self, event):
+        super().showEvent(event)
+        self.auto_close_timer.start(10000)
+
+    def auto_close(self):
+        self.main_window.stacked_widget.setCurrentWidget(self.main_window.menu_page)
+
+class InfoAlertPage(QtWidgets.QWidget):
+    def __init__(self, main_window):
+        super().__init__()
+        self.main_window = main_window
+        self.setup_ui()
+        self.setStyleSheet("""
+            QWidget {
+                background-color: #0E1323;
+            }
+            QLabel {
+                color: #4CF190;
+                font-family: "Press Start 2P", cursive;
+                font-size: 14px;
+            }
+            QPushButton {
+                background-color: #0E1323;
+                color: #4CF190;
+                border: 2px solid #4CF190;
+                padding: 10px;
+                font-size: 16px;
+                font-family: "Press Start 2P", cursive;
+            }
+            QPushButton:hover {
+                background-color: #4CF190;
+                color: #0E1323;
             }
         """)
 
+    def setup_ui(self):
+        layout = QtWidgets.QVBoxLayout()
+        self.message_label = QtWidgets.QLabel("Timer can't be 0! Set a valid time to power up!")
+        layout.addWidget(self.message_label)
+        self.ok_button = QtWidgets.QPushButton("OK")
+        layout.addWidget(self.ok_button)
+        self.setLayout(layout)
+        self.ok_button.clicked.connect(lambda: self.main_window.stacked_widget.setCurrentWidget(self.main_window.menu_page))
+
+class MainWindow(QtWidgets.QMainWindow):
+    def __init__(self, custom_font_family=None):
+        super().__init__()
+        self.setWindowTitle("Game Catcher")
+        self.setGeometry(100, 100, 300, 150)
         if custom_font_family:
-            font = QtGui.QFont(custom_font_family, 10)
+            self.custom_font = QtGui.QFont(custom_font_family, 10)
         else:
-            font = QtGui.QFont("Courier New", 10)
-        self.setFont(font)
+            self.custom_font = QtGui.QFont("Courier New", 10)
+        self.setFont(self.custom_font)
+        self.user_timer = None
 
-    def open_timer_dialog(self):
-        dialog = TimerDialog()
-        if dialog.exec() == QtWidgets.QDialog.Accepted:
-            total_seconds = dialog.get_total_seconds()
-            if total_seconds == 0:
-                QtWidgets.QMessageBox.information(self, "Timer", "타이머 시간이 0으로 설정되었습니다.")
-                return
-            # 타이머 시간(ms) 계산 및 타이머 시작
-            QtCore.QTimer.singleShot(total_seconds * 1000, self.timer_finished)
-            QtWidgets.QMessageBox.information(self, "Timer", f"타이머가 {total_seconds // 3600}시간 { (total_seconds % 3600) // 60}분 후에 울립니다.")
+        # QStackedWidget을 이용해 여러 화면을 관리
+        self.stacked_widget = QtWidgets.QStackedWidget()
+        self.stacked_widget.setStyleSheet("background-color: #0E1323;")
+        self.setCentralWidget(self.stacked_widget)
 
-    def timer_finished(self):
-        QtWidgets.QMessageBox.warning(self, "Timer", "설정한 시간이 지났습니다!")
+        self.login_page = LoginPage(self)
+        self.menu_page = MenuPage(self)
+        self.timer_page = TimerPage(self)
+        self.timer_alert_page = TimerAlertPage(self)
+        self.info_alert_page = InfoAlertPage(self)
+
+        self.stacked_widget.addWidget(self.login_page)
+        self.stacked_widget.addWidget(self.menu_page)
+        self.stacked_widget.addWidget(self.timer_page)
+        self.stacked_widget.addWidget(self.timer_alert_page)
+        self.stacked_widget.addWidget(self.info_alert_page)
+
+        self.stacked_widget.setCurrentWidget(self.login_page)
+
+    def show_timer_alert_page(self):
+        self.stacked_widget.setCurrentWidget(self.timer_alert_page)
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     font_path = "resource/font/PressStart2P-Regular.ttf"
     font_family = load_custom_font(font_path)
-
-    login = LoginDialog()
-    if font_family:
-        login.setFont(QtGui.QFont(font_family, 12))
-    if login.exec() == QtWidgets.QDialog.Accepted:
-        window = MainWindow(custom_font_family=font_family)
-        window.show()
-        sys.exit(app.exec())
+    main_window = MainWindow(custom_font_family=font_family)
+    main_window.show()
+    sys.exit(app.exec())
