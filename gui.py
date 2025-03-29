@@ -282,7 +282,9 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, custom_font_family=None):
         super().__init__()
         self.setWindowTitle("Game Catcher")
-        self.setGeometry(100, 100, 300, 150)
+        # self.setGeometry(100, 100, 100, 150)
+        self.resize(350, 150)
+        self.setMinimumSize(350, 150)
         if custom_font_family:
             self.custom_font = QtGui.QFont(custom_font_family, 10)
         else:
