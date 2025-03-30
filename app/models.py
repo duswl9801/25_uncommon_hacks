@@ -27,7 +27,7 @@ class User(Base):
 
    # Relationships
    user_games = relationship("UserGame", back_populates="user", cascade="all, delete-orphan")
-   sessions = relationship("Session", back_populates="user", cascade="all, delete-orphan")
+   sessions = relationship("GameSession", back_populates="user", cascade="all, delete-orphan")
 
 
 class Guide(Base):
@@ -45,7 +45,7 @@ class Guide(Base):
 
    # Relationships
    user_games = relationship("UserGame", back_populates="guide", cascade="all, delete-orphan")
-   sessions = relationship("Session", back_populates="guide", cascade="all, delete-orphan")
+   sessions = relationship("GameSession", back_populates="guide", cascade="all, delete-orphan")
 
 
 class UserGame(Base):
@@ -55,7 +55,7 @@ class UserGame(Base):
    user_id = Column(Integer, ForeignKey('User.id', ondelete="CASCADE"), nullable=False)
    game_path = Column(String(255), nullable=False)
    game_name = Column(String(255), nullable=False)
-   guide_id = Column(Integer, ForeignKey('Guide.id', ondelete="CASCADE"), nullable=False)
+   guide_id = Column(Integer, ForeignKey('Guide.id', ondelete="CASCADE"), nullable=True)  # nullable로 변경됨
    created_at = Column(DateTime, default=func.current_timestamp())
    updated_at = Column(
       DateTime,

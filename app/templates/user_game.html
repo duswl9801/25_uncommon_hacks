@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>GameCatcher::Your Personal Game Manager</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body class="retro-screen">
+    <div>
+        <div class="title-1 flicker">Add Game</div>
+    </div>
+
+    <div class="sub-title">
+        Provide your favorite game path below.
+    </div>
+
+    <div class="signup-form-container">
+        <form action="/usergame" method="post" class="usergame-form">
+            <!-- hidden input에 user_id 전달 -->
+            <input type="hidden" name="user_id" value="{{ user_id }}">
+            <div class="form-group">
+                <label for="game_path" class="sub-title">Game Path:</label>
+                <input type="text" id="game_path" name="game_path" placeholder="Enter full file path" required>
+            </div>
+            <button type="submit" class="submit-btn">Submit Game Info</button>
+        </form>
+    </div>
+</body>
+</html>

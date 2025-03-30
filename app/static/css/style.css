@@ -331,7 +331,6 @@ body {
     justify-content: center;
     align-items: center;
     gap: 1rem;
-
 }
 
 .login-form input{
@@ -355,4 +354,26 @@ body {
     cursor: pointer;
     transition: background-color 0.3s;
     border: 2px solid #FFF;
+}
+
+
+.signup-form input{
+    height: 2rem;
+    width: 10rem;
+    padding: 0.2rem 0.5rem;
+    margin-top: 1.8rem;
+    box-sizing: border-box;
+}
+
+.signup-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.usergame-form input{
+    height: 2rem;
+    width: 15rem;
+    padding: 0.2rem 0.5rem;
+    margin-top: 1.8rem;
+    box-sizing: border-box;
 }
