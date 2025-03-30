@@ -1,5 +1,7 @@
 import sys
 from PySide6 import QtWidgets, QtCore, QtGui
+from guide.guide import Guide
+import asyncio
 
 def load_custom_font(font_path):
     font_id = QtGui.QFontDatabase.addApplicationFont(font_path)
@@ -242,6 +244,7 @@ class TimerAlertPage(QtWidgets.QWidget):
         self.main_window.stacked_widget.setCurrentWidget(self.main_window.menu_page)
 
 class InfoAlertPage(QtWidgets.QWidget):
+
     def __init__(self, main_window):
         super().__init__()
         self.main_window = main_window
@@ -271,7 +274,12 @@ class InfoAlertPage(QtWidgets.QWidget):
 
     def setup_ui(self):
         layout = QtWidgets.QVBoxLayout()
-        self.message_label = QtWidgets.QLabel("Timer can't be 0! Set a valid time to power up!")
+        ################################################
+        guide = Guide()
+        best_description = guide.findMostSimilarImage()
+        guide_message = guide.printGuide(best_description)
+        ################################################
+        self.message_label = QtWidgets.QLabel(guide_message)
         layout.addWidget(self.message_label)
         self.ok_button = QtWidgets.QPushButton("OK")
         layout.addWidget(self.ok_button)
@@ -292,7 +300,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setFont(self.custom_font)
         self.user_timer = None
 
-        # QStackedWidget을 이용해 여러 화면을 관리
+        # manage several windows by using QStackedWidget
         self.stacked_widget = QtWidgets.QStackedWidget()
         self.stacked_widget.setStyleSheet("background-color: #0E1323;")
         self.setCentralWidget(self.stacked_widget)
@@ -314,10 +322,16 @@ class MainWindow(QtWidgets.QMainWindow):
     def show_timer_alert_page(self):
         self.stacked_widget.setCurrentWidget(self.timer_alert_page)
 
-if __name__ == "__main__":
+
+def startGameCatcher():
     app = QtWidgets.QApplication(sys.argv)
-    font_path = "resource/font/PressStart2P-Regular.ttf"
+    font_path = "assets/PressStart2P-Regular.ttf"
     font_family = load_custom_font(font_path)
     main_window = MainWindow(custom_font_family=font_family)
     main_window.show()
     sys.exit(app.exec())
+
+"""
+if __name__ == "__main__":
+"""
+
