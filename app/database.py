@@ -4,6 +4,7 @@ from sqlalchemy import create_engine
 
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
 
 USERNAME = os.getenv("DB_USERNAME")
@@ -13,6 +14,7 @@ PORT = os.getenv("DB_PORT", "3306")
 DBNAME = os.getenv("DB_NAME")
 
 DB_URL = f'mysql+pymysql://{USERNAME}:{PASSWORD}@{HOST}:{PORT}/{DBNAME}'
+
 
 class engineconn:
     def __init__(self):

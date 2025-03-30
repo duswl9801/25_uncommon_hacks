@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>GameCatcher::Your Personal Game Manager</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body class="retro-screen">
+    <div>
+        <div class="title-2 flicker">Log In</div>
+    </div>
+
+    <form action="/login" method="post" class="login-form">
+        <div class="form-group">
+            <label for="name" class="sub-title">Username</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="password" class="sub-title">Password</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit" class="submit-btn flicker">Log In</button>
+    </form>
+
+<div class="start-text ">
+    <div class="enter-key">Backspace</div> to Home
+</div>
+    <script>
+      document.addEventListener('keydown', function(e) {
+        if (e.code === 'Backspace') {
+          window.location.href = '/';
+        }
+      });
+    </script>
+
+</body>
+</html>

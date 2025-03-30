@@ -1,0 +1,379 @@
+@font-face {
+    font-family: 'Press Start 2P';
+    src: url('../fonts/PressStart2P-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'pixelify';
+    src: url('../fonts/PixelifySans-VariableFont_wght.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: #0E1323; /* 짙은 녹색 배경 */
+}
+
+body {
+    font-family: 'Press Start 2P', sans-serif;
+    background-color: #0E1323;
+    color: #4CF190;
+}
+
+
+.retro-screen {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    transform: scale(1.01);
+    overflow: hidden;
+}
+
+/* 스캔 라인 효과: repeating-linear-gradient로 가로줄 패턴 생성 */
+.retro-screen::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+
+    /*
+       - transparent 0px, transparent 2px: 2px까지는 투명
+       - rgba(0, 0, 0, 0.1) 2px, rgba(0, 0, 0, 0.1) 3px: 1px 두께의 반투명 줄
+       - 이런 식으로 3px 간격으로 반복
+    */
+    background: repeating-linear-gradient(
+            to bottom,
+            transparent 0px,
+            transparent 2px,
+            rgba(0, 0, 0, 0.1) 2px,
+            rgba(0, 0, 0, 0.1) 3px
+    );
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.9;
+    }
+}
+
+.flicker {
+    animation: blink 0.1s infinite;
+}
+
+.title-1 {
+    color: #FFABBA;
+
+    text-align: center;
+    text-shadow: 0px 2px 44px #FF008A, 0px 2px 44px #FF003D, 0px 2px 12px #FF517B;
+    font-family: "Press Start 2P";
+    font-size: 4rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 3rem;
+    filter: blur(0.5px);
+    margin-bottom: 2rem;
+}
+
+.title-2 {
+    color: #4CF190;
+    text-align: center;
+    text-shadow: 0px 2px 44px #BDFF00, 0px 2px 12px #8FFF00;
+    font-family: "Press Start 2P";
+    font-size: 4rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 3rem; /* 75% */
+    filter: blur(0.5px);
+}
+
+.sub-title {
+    color: #C0C0C0;
+    text-align: center;
+    font-family: "Press Start 2P";
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.875rem; /* 125% */
+    margin-top: 2.5rem;
+}
+
+.start-text {
+    color: #C0C0C0;
+    text-shadow: 0px 2px 44px rgba(255, 255, 255, 0.70), 0px 2px 20px rgba(255, 255, 255, 0.60);
+    font-family: "Press Start 2P";
+    font-size: 0.75rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.25rem; /* 166.667% */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5rem;
+}
+
+.enter-key {
+    display: flex;
+    padding: 0.4375rem 1.25rem 0.5rem 1.25rem;
+    margin: 0 1rem;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #FFF;
+    box-shadow: 0px 2px 44px 0px rgba(255, 255, 255, 0.10), 0px 2px 20px 0px rgba(255, 255, 255, 0.10);
+}
+
+
+.game {
+    background-image: url('../img/game-bg.svg');
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    margin: 20px;
+}
+
+.game-left {
+    width: 25rem;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.game-right {
+    text-align: left;
+    width: 60rem;
+    padding: 20px 0 20px 20px;
+    margin: 40px 0 20px 20px;
+}
+
+
+.game-left-top {
+    margin-left: 40px;
+    margin-top: 40px;
+    max-width: 25rem;
+    background-repeat: no-repeat;
+    font-family: 'pixelify', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 200;
+}
+
+.game-left-top-title {
+    font-size: 2.5rem;
+    font-style: normal;
+    font-weight: 200;
+    line-height: normal;
+    margin-bottom: 1rem;
+}
+
+.icon {
+    width: 4rem;
+    padding-top: 1rem;
+}
+
+.game-left-bt {
+    color: #000;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    padding-top: 9rem;
+    margin-bottom: 10px;
+    padding-left: 10px;
+}
+
+.game-right {
+    padding: 20px;
+    background-repeat: no-repeat;
+}
+
+.red-box {
+    width: 26.5rem;
+    height: 6rem;
+    background-image: url('../img/red-box.svg');
+    background-repeat: no-repeat;
+    color: #FFF;
+    font-family: "Press Start 2P";
+    font-size: 1.125rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    position: relative; /* 자식 요소의 위치 기준 설정 */
+    overflow: hidden;
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+.red-box .marquee {
+    display: inline-block;
+    white-space: nowrap;
+    padding: 5px;
+    animation: marquee 10s linear infinite;
+}
+
+.time {
+    background-image: url('../img/time.svg');
+    width: 27rem;
+    height: 10rem;
+    background-repeat: no-repeat;
+}
+
+@keyframes blink-time {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+.time p {
+    color: #4CF190;
+    padding-top: 25px;
+    font-size: 2.5rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    animation: blink-time 6s infinite;
+}
+
+.screen {
+    height: 48rem;
+    overflow: auto;
+}
+
+.chart {
+    margin-left: 5rem;
+    margin-top: 1rem;
+    width: 50rem;
+}
+
+.chart p {
+    text-align: left;
+    font-family: "Pixelify";
+    font-size: 1.875rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.right-info {
+    margin-left: 5rem;
+    font-family: "Pixelify";
+    font-size: 1.875rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    display: flex;
+}
+
+.pic {
+    width: 25rem;
+    height: 18rem;
+    background-color: #C0C0C0;
+}
+
+.info {
+    margin-left: 4rem;
+}
+
+.info-sm {
+    color: #4CF190;
+    font-size: 1.3rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.back-icon {
+    margin-top: 2rem;
+    margin-left: 28rem;
+}
+
+.back-icon:hover {
+    transform: scale(1.1);
+}
+
+
+.login-form {
+    padding-top: 5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.login-form input{
+    height: 2rem;
+    width: 10rem;
+    padding: 0.2rem 0.5rem;
+    margin-top: 1.8rem;
+    box-sizing: border-box;
+}
+
+
+.submit-btn {
+    font-family: "Press Start 2P";
+    width: 100%;
+    margin-top: 1.8rem;
+    padding: 1em;
+    border: none;
+    background-color: #0E1323;
+    color: #FFF;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border: 2px solid #FFF;
+}
+
+
+.signup-form input{
+    height: 2rem;
+    width: 10rem;
+    padding: 0.2rem 0.5rem;
+    margin-top: 1.8rem;
+    box-sizing: border-box;
+}
+
+.signup-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.usergame-form input{
+    height: 2rem;
+    width: 15rem;
+    padding: 0.2rem 0.5rem;
+    margin-top: 1.8rem;
+    box-sizing: border-box;
+}
