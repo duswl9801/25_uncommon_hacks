@@ -10,6 +10,7 @@ class Emotions:
 
     def detectEmotion(self, face):
         model_path = "emotiontracker/facialemotionmodel.h5"
+        #model_path = "emotiontracker/mobilenet_7.h5"
         model = tf.keras.models.load_model(model_path)
 
         prediction = model.predict(face, verbose=0)
@@ -102,7 +103,9 @@ class Emotions:
             label = 2   # negative
 
         print(self.emotions)
+        print(label)
         emotion_sum = sum(self.emotions)
+        print(self.emotion_labels[label])
 
         return emotion_sum, label
 
