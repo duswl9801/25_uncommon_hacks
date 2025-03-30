@@ -17,7 +17,7 @@ html, body {
     margin: 0;
     padding: 0;
     height: 100%;
-    background-color: #001b00; /* 짙은 녹색 배경 */
+    background-color: #0E1323; /* 짙은 녹색 배경 */
 }
 
 body {
@@ -317,4 +317,42 @@ body {
 
 .back-icon:hover {
     transform: scale(1.1);
+}
+
+
+.login-form {
+    padding-top: 5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+
+}
+
+.login-form input{
+    height: 2rem;
+    width: 10rem;
+    padding: 0.2rem 0.5rem;
+    margin-top: 1.8rem;
+    box-sizing: border-box;
+}
+
+
+.submit-btn {
+    font-family: "Press Start 2P";
+    width: 100%;
+    margin-top: 1.8rem;
+    padding: 1em;
+    border: none;
+    background-color: #0E1323;
+    color: #FFF;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border: 2px solid #FFF;
 }
