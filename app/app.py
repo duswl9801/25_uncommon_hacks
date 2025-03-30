@@ -7,6 +7,8 @@ from database import engineconn
 from models import User, Base
 from pydantic import BaseModel
 from typing import Optional, List
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 
 
 # Create the FastAPI app instance
@@ -23,6 +25,14 @@ def get_db():
         yield db
     finally:
         db.close()
+
+#Front template
+templates = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+@app.get("/", response_class=HTMLResponse)
+def main_page(request: Request):
+    return templates.TemplateResponse("main.html", {"request": request})
 
 # -----------------------------------------------------
 # USER Endpoints
