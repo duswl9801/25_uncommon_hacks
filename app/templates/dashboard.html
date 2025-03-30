@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>GameCatcher::Your Personal Game Manager</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="retro-screen">
+<div class="game">
+    <div class="game-left">
+        <div class="game-left-top">
+            <img class="icon" src="../static/img/face.svg" alt="">
+            <div class="game-left-top-title">ABOUT US</div>
+            GameCatcher logs your gaming emotions. <br>
+            Relive every epic win and even those rough patches.
+            <br> Got feedback or spot a bug?
+            <br>Let us know!
+        </div>
+        <div class="game-left-bt">
+            <div>
+                <p>Your Weekly Gaming Activity</p>
+                <img src="../static/img/low-button.svg" alt="button">
+            </div>
+            <div>
+                <p>Top Played Game</p>
+                <div class="red-box">
+                    <p class="marquee">RANDOM GAME</p>
+                </div>
+            </div>
+            <div>
+                <p>Total Play Time So Far</p>
+                <div class="time">
+                    <p>10:23</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="game-right">
+        <div class="screen">
+            <div class="chart">
+                <p>Mood Map</p>
+                <canvas id="emotionChart" width="600" height="300"></canvas>
+            </div>
+            <div class="right-info">
+                <div class="picture">
+                    <p>Click Moment</p>
+                    <div class="pic"></div>
+                </div>
+                <div class="info">
+                    <p>Details</p>
+                    <p class="info-sm">
+                        Game Name: RANDOM GAME <br>
+                        Duration: 50 mins <br>
+                        <br>
+                        ---------------------------<br>
+                        Mood <br>
+                        - Positive: 16% <br>
+                        - Neutral: 70% <br>
+                        - Negative: 14% <br>
+                        ---------------------------<br>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="button">
+            <img class="back-icon" src="../static/img/back.svg" alt="">
+        </div>
+    </div>
+</div>
+<script>
+    const ctx = document.getElementById('emotionChart').getContext('2d');
+    const picDiv = document.querySelector('.pic');
+
+    // 예시 데이터: 시간별 감정 점수
+    const chartData = {
+        labels: ['10:00', '10:10', '10:20', '10:30', '10:40', '10:50'],
+        datasets: [{
+            label: 'Emotion',
+            data: [-1, 0, 0, 1, 1, -1],
+            fill: false,
+            borderColor: 'rgba(76, 241, 144, 1)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            tension: 0.1
+        }]
+    };
+
+    const options = {
+        plugins: {
+            legend: {
+                labels: {
+                    font: {
+                        family: 'pixelify',
+                        size: 14
+                    }
+                }
+            }
+        },
+        scales: {
+            x: {
+                ticks: {
+                    font: {
+                        family: 'pixelify',
+                        size: 12
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Time',
+                    font: {
+                        family: 'pixelify',
+                        size: 16
+                    }
+                }
+            },
+            y: {
+                ticks: {
+                    font: {
+                        family: 'pixelify',
+                        size: 12
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Emotion',
+                    font: {
+                        family: 'pixelify',
+                        size: 16
+                    }
+                },
+                suggestedMin: -1,
+                suggestedMax: 1
+            }
+        },
+        // Chart.js의 onClick 옵션을 사용하여 클릭 이벤트 처리
+        onClick: (event, activeElements) => {
+            if (activeElements.length > 0) {
+                // 첫번째 활성 데이터 포인트의 인덱스 추출
+                const index = activeElements[0].index;
+                // 해당 인덱스의 시간(라벨) 가져오기
+                const timeLabel = chartData.labels[index];
+                // .pic 요소에 시간 표시
+                picDiv.innerHTML = `<strong>Clicked Time:</strong> ${timeLabel}`;
+            }
+        }
+    };
+
+    const emotionChart = new Chart(ctx, {
+        type: 'line',
+        data: chartData,
+        options: options
+    });
+</script>
+</body>
+</html>
