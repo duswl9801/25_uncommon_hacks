@@ -9,7 +9,8 @@ from pydantic import BaseModel
 from typing import Optional, List
 from fastapi.staticfiles import StaticFiles
 import os
-from models import User, UserGame, Guide, GameSession, Base
+from models import User, UserGame, Guide, GameSession, Base, Emotion
+from datetime import timedelta
 
 
 # Create the FastAPI app instance
@@ -40,9 +41,33 @@ def main_page(request: Request):
 
 
 @app.get("/dashboard", response_class=HTMLResponse)
-def dashboard_page(request: Request):
-    return templates.TemplateResponse("dashboard.html", {"request": request})
+def dashboard_page(request: Request, db: Session = Depends(get_db)):
+    # Fetch Emotion and GameSession data
+    emotions = db.query(Emotion).order_by(Emotion.created_at).all()
+    sessions = db.query(GameSession).all()
 
+    # Prepare chart data
+    mapping = {"negative": -1, "neutral": 0, "positive": 1}
+    chart_labels = [em.created_at.strftime("%H:%M") for em in emotions]
+    chart_data = [mapping.get(em.emotion_label.lower(), 0) for em in emotions]
+
+    # Calculate total play time from sessions
+    total_duration = timedelta()
+    for s in sessions:
+        if s.started_time and s.created_at:
+            total_duration += s.started_time - s.created_at
+
+    total_minutes = int(total_duration.total_seconds() // 60)
+    total_hours = total_minutes // 60
+    remaining_minutes = total_minutes % 60
+    total_time_str = f"{total_hours:02}:{remaining_minutes:02}"
+
+    return templates.TemplateResponse("dashboard.html", {
+        "request": request,
+        "chart_labels": chart_labels,
+        "chart_data": chart_data,
+        "total_play_time": total_time_str
+    })
 
 # -----------------------------------------------------
 # USER Endpoints

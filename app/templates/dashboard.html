@@ -31,7 +31,7 @@
             <div>
                 <p>Total Play Time So Far</p>
                 <div class="time">
-                    <p>10:23</p>
+                    <p>{{total_play_time}}</p>
                 </div>
             </div>
         </div>
@@ -69,15 +69,18 @@
     </div>
 </div>
 <script>
+    // Chart 데이터는 서버에서 전달된 chart_labels와 chart_data 변수를 사용합니다.
+    const chartLabels = {{ chart_labels | tojson }};
+    const chartDataValues = {{ chart_data | tojson }};
+
     const ctx = document.getElementById('emotionChart').getContext('2d');
     const picDiv = document.querySelector('.pic');
 
-    // 예시 데이터: 시간별 감정 점수
     const chartData = {
-        labels: ['10:00', '10:10', '10:20', '10:30', '10:40', '10:50'],
+        labels: chartLabels,
         datasets: [{
             label: 'Emotion',
-            data: [-1, 0, 0, 1, 1, -1],
+            data: chartDataValues,
             fill: false,
             borderColor: 'rgba(76, 241, 144, 1)',
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
@@ -128,18 +131,16 @@
                         size: 16
                     }
                 },
+                // y축 범위는 실제 데이터에 맞게 조정
                 suggestedMin: -1,
                 suggestedMax: 1
             }
         },
-        // Chart.js의 onClick 옵션을 사용하여 클릭 이벤트 처리
+        // 클릭 시 해당 시간 라벨을 표시합니다.
         onClick: (event, activeElements) => {
             if (activeElements.length > 0) {
-                // 첫번째 활성 데이터 포인트의 인덱스 추출
                 const index = activeElements[0].index;
-                // 해당 인덱스의 시간(라벨) 가져오기
                 const timeLabel = chartData.labels[index];
-                // .pic 요소에 시간 표시
                 picDiv.innerHTML = `<strong>Clicked Time:</strong> ${timeLabel}`;
             }
         }
