@@ -11,7 +11,7 @@ def captureandsendScreenshot(path):
     now_time = time.strftime('%Y_%m_%d_%H_%M_%S')
     dest = path + now_time + ".png"
     #screenshot = pgui.screenshot(dest + now_time + ".png")
-    screenshot = pgui.screenshot(dest )
+    screenshot = pgui.screenshot(dest)
     #print(screenshot)
 
     return screenshot, dest

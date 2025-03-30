@@ -6,12 +6,12 @@ import pymysql
 
 async def emoscr():
 
-    cycle = 2   # cycle of detecting emotion and screenshot. track things every 5 seconds
+    cycle = 1   # cycle of detecting emotion and screenshot
     user_emotions = Emotions()
 
     # Establish database connection
-    conn = pymysql.connect(host='127.0.0.1', user='root', password='9078', database='gamecatcher')
-    cursor = conn.cursor()
+    #conn = pymysql.connect(host='127.0.0.1', user='root', password='9078', database='gamecatcher')
+    #cursor = conn.cursor()
 
 
     while True:
@@ -20,12 +20,12 @@ async def emoscr():
         screenshot, dest = util.captureandsendScreenshot(path)
 
         insert_query = """
-            INSERT INTO emotion (label, img_path)
+            INSERT INTO emotion (screenshot, emotion_label)
             VALUES (%s, %s)
             """
-        cursor.execute(insert_query, (label, dest))
+        #cursor.execute(insert_query, (dest, label))
 
-        conn.commit()
+        #conn.commit()
 
         if emotion_sum <= -3:
             print('###WARNING. PERSISTENCE OF NEGATIVE FEELING###')

@@ -1,7 +1,11 @@
 import sys
 from PySide6 import QtWidgets, QtCore, QtGui
+from PySide6.QtCore import Signal, QObject
 from guide.guide import Guide
 import asyncio
+
+class Communicator(QObject):
+    send_data = Signal(str)  # Define a signal that sends a string
 
 def load_custom_font(font_path):
     font_id = QtGui.QFontDatabase.addApplicationFont(font_path)
@@ -10,7 +14,7 @@ def load_custom_font(font_path):
         return None
     font_families = QtGui.QFontDatabase.applicationFontFamilies(font_id)
     if font_families:
-        print("Loaded custom font:", font_families[0])
+        #print("Loaded custom font:", font_families[0])
         return font_families[0]
     return None
 
@@ -71,13 +75,15 @@ class LoginPage(QtWidgets.QWidget):
         password = self.password_edit.text()
         # TODO - Connect Login
         if username == "admin" and password == "1234":
+            #await asyncio.sleep(1)
             self.main_window.stacked_widget.setCurrentWidget(self.main_window.menu_page)
         else:
             QtWidgets.QMessageBox.warning(self, "Error", "Incorrect username or password")
 
 class MenuPage(QtWidgets.QWidget):
-    def __init__(self, main_window):
+    def __init__(self, main_window, communicator):
         super().__init__()
+        self.communicator = communicator
         self.main_window = main_window
         self.setup_ui()
         self.setStyleSheet("""
@@ -114,11 +120,21 @@ class MenuPage(QtWidgets.QWidget):
 
     def handle_cheat(self):
         # TODO - LLM
+        guide = Guide()
+        best_description = guide.findMostSimilarImage()
+        guide_message = guide.printGuide(best_description)
+        guide_message = ("The player is at the start of a puzzle involving the four statues. \n"
+                         "The next step is to examine the symbols above the Anubis statue.")
+        #self.message_label = QtWidgets.QLabel(guide_message)
+        self.communicator.send_data.emit(guide_message)
+        #await asyncio.sleep(1)
         self.main_window.stacked_widget.setCurrentWidget(self.main_window.info_alert_page)
 
+
 class TimerPage(QtWidgets.QWidget):
-    def __init__(self, main_window):
+    def __init__(self, main_window, communicator):
         super().__init__()
+        self.communicator = communicator  # Pass communicator instance
         self.main_window = main_window
         self.setup_ui()
         self.setStyleSheet("""
@@ -182,6 +198,7 @@ class TimerPage(QtWidgets.QWidget):
         total_seconds = hours * 3600 + minutes * 60
         if total_seconds == 0:
             # 타이머 시간이 0이면 InfoAlertPage 표시
+            self.communicator.send_data.emit("Timer can't be 0! Set a valid time to power up!")  # Emit signal with data
             self.main_window.stacked_widget.setCurrentWidget(self.main_window.info_alert_page)
         else:
             self.main_window.user_timer = QtCore.QTimer(self)
@@ -245,9 +262,10 @@ class TimerAlertPage(QtWidgets.QWidget):
 
 class InfoAlertPage(QtWidgets.QWidget):
 
-    def __init__(self, main_window):
+    def __init__(self, main_window, communicator):
         super().__init__()
         self.main_window = main_window
+        self.communicator = communicator
         self.setup_ui()
         self.setStyleSheet("""
             QWidget {
@@ -273,18 +291,20 @@ class InfoAlertPage(QtWidgets.QWidget):
         """)
 
     def setup_ui(self):
+        self.message_label = QtWidgets.QLabel("waiting data")
+        self.communicator.send_data.connect(self.update_label)  # Connect signal to slot
         layout = QtWidgets.QVBoxLayout()
-        ################################################
-        guide = Guide()
-        best_description = guide.findMostSimilarImage()
-        guide_message = guide.printGuide(best_description)
-        ################################################
-        self.message_label = QtWidgets.QLabel(guide_message)
         layout.addWidget(self.message_label)
         self.ok_button = QtWidgets.QPushButton("OK")
         layout.addWidget(self.ok_button)
         self.setLayout(layout)
+
         self.ok_button.clicked.connect(lambda: self.main_window.stacked_widget.setCurrentWidget(self.main_window.menu_page))
+
+    def update_label(self, message):
+        self.message_label.setText(message)
+        #print(message)
+
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, custom_font_family=None):
@@ -293,6 +313,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # self.setGeometry(100, 100, 100, 150)
         self.resize(350, 150)
         self.setMinimumSize(350, 150)
+        self.communicator = Communicator()  # Shared communicator object
         if custom_font_family:
             self.custom_font = QtGui.QFont(custom_font_family, 10)
         else:
@@ -306,10 +327,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setCentralWidget(self.stacked_widget)
 
         self.login_page = LoginPage(self)
-        self.menu_page = MenuPage(self)
-        self.timer_page = TimerPage(self)
+        self.menu_page = MenuPage(self, self.communicator)
+        self.timer_page = TimerPage(self, self.communicator)
         self.timer_alert_page = TimerAlertPage(self)
-        self.info_alert_page = InfoAlertPage(self)
+        self.info_alert_page = InfoAlertPage(self, self.communicator)
 
         self.stacked_widget.addWidget(self.login_page)
         self.stacked_widget.addWidget(self.menu_page)
@@ -331,7 +352,6 @@ def startGameCatcher():
     main_window.show()
     sys.exit(app.exec())
 
-"""
-if __name__ == "__main__":
-"""
+
+startGameCatcher()
 

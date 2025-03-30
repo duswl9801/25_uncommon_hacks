@@ -9,6 +9,7 @@ class Emotions:
     emotion_labels = ['Positive', 'Neutral', "Negative"]
 
     def detectEmotion(self, face):
+        # EmotiEffLib
         model_path = "emotiontracker/facialemotionmodel.h5"
         #model_path = "emotiontracker/mobilenet_7.h5"
         model = tf.keras.models.load_model(model_path)
@@ -49,7 +50,7 @@ class Emotions:
                                                 minSize=(30, 30))
 
         # print number of detected faces
-        print(len(faces))
+        #print(len(faces))
 
         if len(faces) != 0:
             # Get the largest face
@@ -103,7 +104,7 @@ class Emotions:
             label = 2   # negative
 
         print(self.emotions)
-        print(label)
+        #print(label)
         emotion_sum = sum(self.emotions)
         print(self.emotion_labels[label])
 
