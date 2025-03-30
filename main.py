@@ -1,7 +1,7 @@
 import emotiontracker.emotion_screenshot as emo_scr
 import asyncio
 from guide.guide import Guide
-import time
+#import gui
 
 kill = 0
 
@@ -26,13 +26,15 @@ async def clickGuide():
 
         guide = Guide()
         best_description = guide.findMostSimilarImage()
-        print('before searchguide')
         guide.printGuide(best_description)
 
         await asyncio.sleep(40)
 
 
 async def main():
+    #gui.startGameCatcher()
+
+
     loop_task1 = asyncio.create_task(emo_scr.emoscr())  # Runs in the background
     await heavy_work()  # Runs calculation
     #loop_task2 = asyncio.create_task(clickGuide())  # Runs in the background
