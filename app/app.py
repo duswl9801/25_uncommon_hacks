@@ -34,6 +34,10 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 def main_page(request: Request):
     return templates.TemplateResponse("main.html", {"request": request})
 
+@app.get("/dashboard", response_class=HTMLResponse)
+def dashboard_page(request: Request):
+    return templates.TemplateResponse("dashboard.html", {"request": request})
+
 # -----------------------------------------------------
 # USER Endpoints
 # -----------------------------------------------------
