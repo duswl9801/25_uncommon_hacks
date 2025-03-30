@@ -17,6 +17,18 @@ CATCH YOUR MOMENT </div>
 <div class="start-text ">
     <div class="enter-key">S</div> to Sign Up, <div class="enter-key">SPACE</div> to Log In
 </div>
+ <script>
+    document.addEventListener('keydown', function(e) {
+      // "S" 키로 Sign Up 페이지 이동
+      if (e.code === 'KeyS') {
+        window.location.href = '/signup';
+      }
+      // "SPACE" 키로 Log In 페이지 이동
+      else if (e.code === 'Space') {
+        window.location.href = '/login';
+      }
+    });
+  </script>
 
 </body>
 </html>
