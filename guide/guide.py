@@ -18,7 +18,6 @@ class Guide:
     temp_img = pimage.open("guide/screenshot_sample/test/test.webp")
 
     def __init__(self):
-
         self.stuck_point = util.captureandsendScreenshot(self.path)
 
 
